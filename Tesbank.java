@@ -9,7 +9,6 @@ package TKA_AnandhitaPutriYoan;
  *
  * @author user
  */
-import java.util.Scanner;
 public class Tesbank {
    public static void main(String[] args) {
         // Membuat objek Bank
