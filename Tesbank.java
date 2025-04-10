@@ -9,68 +9,150 @@ package TKA_AnandhitaPutriYoan;
  *
  * @author user
  */
+import java.util.Scanner;
 public class Tesbank {
-   public static void main(String[] args) {
-        // Membuat objek Bank
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
         Bank bank = new Bank();
 
-        // Menambahkan nasabah sesuai dengan perintah pada gambar
-        bank.tambahNasabah("Andi", "Sucipto", new Tabungan(5000000)); // Nasabah dengan tabungan
-        bank.tambahNasabah("Budi", "Pratama");                      // Nasabah tanpa tabungan
-        bank.tambahNasabah("Candra", "Dinata", new Tabungan(3000000)); // Nasabah dengan tabungan
-        bank.tambahNasabah("Dede", "Kusuma", new Tabungan(7000000));   // Nasabah dengan tabungan
-        bank.tambahNasabah("Dede", "Andika");                       // Nasabah tanpa tabungan
-        bank.tambahNasabah("Budi", "Dirgantara", new Tabungan(1000000)); // Nasabah dengan tabungan
+        int menu;
+        do {
+            System.out.println("\nMenu:");
+            System.out.println("1. Tambah Nasabah");
+            System.out.println("2. Tambah Nasabah dengan Tabungan");
+            System.out.println("3. Jumlah Nasabah");
+            System.out.println("4. Cari Nasabah");
+            System.out.println("5. Daftar Nasabah");
+            System.out.println("6. Simpan Uang");
+            System.out.println("7. Ambil Uang");
+            System.out.println("8. Keluar");
+            System.out.print("Pilih (1-8): ");
+            menu = input.nextInt();
+            input.nextLine(); // Membersihkan newline
 
-        // Tampilkan semua nasabah yang ada
-        System.out.println("Daftar semua nasabah:");
+            switch (menu) {
+                case 1:
+                    tambahNasabah(input, bank);
+                    break;
+
+                case 2:
+                    tambahNasabahDenganTabungan(input, bank);
+                    break;
+
+                case 3:
+                    System.out.println("Jumlah nasabah: " + bank.getJumlahNasabah());
+                    break;
+
+                case 4:
+                    cariNasabah(input, bank);
+                    break;
+
+                case 5:
+                    tampilkanSemuaNasabah(bank);
+                    break;
+
+                case 6:
+                    simpanUang(input, bank);
+                    break;
+
+                case 7:
+                    ambilUang(input, bank);
+                    break;
+
+                case 8:
+                    System.out.println("Terima kasih!");
+                    break;
+
+                default:
+                    System.out.println("Pilihan salah. Coba lagi.");
+            }
+        } while (menu != 8);
+
+        input.close();
+    }
+
+    private static void tambahNasabah(Scanner input, Bank bank) {
+        System.out.print("Nama Awal: ");
+        String namaAwal = input.nextLine();
+        System.out.print("Nama Akhir: ");
+        String namaAkhir = input.nextLine();
+        bank.tambahNasabah(namaAwal, namaAkhir);
+        System.out.println("Nasabah ditambahkan.");
+    }
+
+    private static void tambahNasabahDenganTabungan(Scanner input, Bank bank) {
+        System.out.print("Nama Awal: ");
+        String namaAwal = input.nextLine();
+        System.out.print("Nama Akhir: ");
+        String namaAkhir = input.nextLine();
+        System.out.print("Saldo Awal: ");
+        int saldo = input.nextInt();
+        bank.tambahNasabah(namaAwal, namaAkhir, new Tabungan(saldo));
+        System.out.println("Nasabah dengan tabungan ditambahkan.");
+    }
+
+    private static void cariNasabah(Scanner input, Bank bank) {
+        System.out.print("Nama Awal: ");
+        String namaAwal = input.nextLine();
+        System.out.print("Nama Akhir: ");
+        String namaAkhir = input.nextLine();
+        int indeks = bank.searchNasabah(namaAwal, namaAkhir);
+        if (indeks != -1) {
+            System.out.println("Nasabah ditemukan: " + bank.getNasabah(indeks));
+        } else {
+            System.out.println("Nasabah tidak ditemukan.");
+        }
+    }
+
+    private static void tampilkanSemuaNasabah(Bank bank) {
+        System.out.println("Daftar Nasabah:");
         for (int i = 0; i < bank.getJumlahNasabah(); i++) {
-            Nasabah nasabah = bank.getNasabah(i);
-            System.out.println("Indeks " + i + ": " + nasabah);
+            System.out.println(i + "." + bank.getNasabah(i).toString());
         }
-        System.out.println("Total jumlah nasabah: " + bank.getJumlahNasabah());
+    }
 
-        // Dapatkan informasi nasabah pada indeks ke-3
-        System.out.println("\nInformasi nasabah pada indeks ke-3:");
-        Nasabah nasabahIndeks3 = bank.getNasabah(3);
-        if (nasabahIndeks3 != null) {
-            System.out.println(nasabahIndeks3);
-        } else {
-            System.out.println("Nasabah tidak ditemukan pada indeks ke-3.");
-        }
-
-        // Dapatkan informasi nasabah dengan namaAwal: Candra dan namaAkhir: Dinata
-        System.out.println("\nMencari nasabah dengan nama Candra Dinata:");
-        int indeksCandra = bank.searchNasabah("Candra", "Dinata");
-        if (indeksCandra != -1) {
-            System.out.println("Nasabah ditemukan pada indeks: " + indeksCandra);
-            System.out.println(bank.getNasabah(indeksCandra));
-        } else {
-            System.out.println("Nasabah dengan nama Candra Dinata tidak ditemukan.");
-        }
-
-        // Dapatkan informasi nasabah dengan namaAwal: Dede
-        System.out.println("\nMencari nasabah dengan nama awal Dede:");
-        int[] indeksDede = bank.searchNasabah("Dede");
-        if (indeksDede.length > 0) {
-            System.out.println("Nasabah dengan nama awal Dede ditemukan pada indeks:");
-            for (int indeks : indeksDede) {
-                System.out.println("Indeks " + indeks + ": " + bank.getNasabah(indeks));
+    private static void simpanUang(Scanner input, Bank bank) {
+        System.out.print("Nama Awal: ");
+        String namaAwal = input.nextLine();
+        System.out.print("Nama Akhir: ");
+        String namaAkhir = input.nextLine();
+        int indeks = bank.searchNasabah(namaAwal, namaAkhir);
+        if (indeks != -1) {
+            Nasabah nasabah = bank.getNasabah(indeks);
+            if (nasabah.getTabungan() == null) {
+                System.out.println("Nasabah tidak memiliki tabungan.");
+            } else {
+                System.out.print("Jumlah disimpan: ");
+                int jumlah = input.nextInt();
+                nasabah.getTabungan().simpanUang(jumlah);
+                System.out.println("Uang disimpan.");
             }
         } else {
-            System.out.println("Tidak ada nasabah dengan nama awal Dede.");
+            System.out.println("Nasabah tidak ditemukan.");
         }
+    }
 
-        // Dapatkan informasi nasabah dengan namaAwal: Budi
-        System.out.println("\nMencari nasabah dengan nama awal Budi:");
-        int[] indeksBudi = bank.searchNasabah("Budi");
-        if (indeksBudi.length > 0) {
-            System.out.println("Nasabah dengan nama awal Budi ditemukan pada indeks:");
-            for (int indeks : indeksBudi) {
-                System.out.println("Indeks " + indeks + ": " + bank.getNasabah(indeks));
+    private static void ambilUang(Scanner input, Bank bank) {
+        System.out.print("Nama Awal: ");
+        String namaAwal = input.nextLine();
+        System.out.print("Nama Akhir: ");
+        String namaAkhir = input.nextLine();
+        int indeks = bank.searchNasabah(namaAwal, namaAkhir);
+        if (indeks != -1) {
+            Nasabah nasabah = bank.getNasabah(indeks);
+            if (nasabah.getTabungan() == null) {
+                System.out.println("Nasabah tidak memiliki tabungan.");
+            } else {
+                System.out.print("Jumlah diambil: ");
+                int jumlah = input.nextInt();
+                if (nasabah.getTabungan().ambilUang(jumlah)) {
+                    System.out.println("Uang diambil.");
+                } else {
+                    System.out.println("Saldo tidak cukup.");
+                }
             }
         } else {
-            System.out.println("Tidak ada nasabah dengan nama awal Budi.");
+            System.out.println("Nasabah tidak ditemukan.");
         }
-   }
+    }
 }

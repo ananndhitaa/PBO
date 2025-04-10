@@ -9,55 +9,64 @@ package TKA_AnandhitaPutriYoan;
  *
  * @author user
  */
+import java.util.Scanner;
+
 public class Test {
-        public static void main(String[] args) {
-        // Membuat dua objek Nasabah
-        Nasabah nasabah1 = new Nasabah("Andin", "Putri");
-        Tabungan tabungan1 = new Tabungan(5000);
-        nasabah1.setTabungan(tabungan1);
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
 
-        Nasabah nasabah2 = new Nasabah("Dean", "Kusuma");
-        Tabungan tabungan2 = new Tabungan(3000);
-        nasabah2.setTabungan(tabungan2);
+        System.out.print("Nama Awal: ");
+        String namaAwal = input.nextLine();
+        System.out.print("Nama Akhir: ");
+        String namaAkhir = input.nextLine();
+
+        Nasabah nasabah = new Nasabah(namaAwal, namaAkhir);
+
+        System.out.print("Saldo Awal: ");
+        int saldoAwal = input.nextInt();
         
+        Tabungan tabungan = new Tabungan(saldoAwal);
+        nasabah.setTabungan(tabungan);
 
-        System.out.println("Nasabah 1: " + nasabah1);
-        System.out.println("Nasabah 2: " + nasabah2);
-   
-        // Nasabah 1 menabung
-        nasabah1.getTabungan().simpanUang(4000);
-        System.out.println("Saldo Nasabah 1 setelah menabung (5000000) : " + nasabah1.getTabungan().getSaldo());
+        System.out.println("\nInfo Nasabah: " + nasabah);
 
-        // Nasabah 2 menabung
-        nasabah2.getTabungan().simpanUang(7000);
-        System.out.println("Saldo Nasabah 2 setelah menabung (7000): " + nasabah2.getTabungan().getSaldo());
+        int menu;
+        do {
+            System.out.println("\nMenu:");
+            System.out.println("1. Lihat Saldo");
+            System.out.println("2. Simpan Uang");
+            System.out.println("3. Ambil Uang");
+            System.out.println("4. Keluar");
+            System.out.print("Pilih (1-4): ");
+            menu = input.nextInt();
 
-        // Nasabah 1 mengambil uang
-        if (nasabah1.getTabungan().ambilUang(5000)) {
-            System.out.println("Saldo Nasabah 1 setelah mengambil uang (5000) : " + nasabah1.getTabungan().getSaldo());
-        } else {
-            System.out.println("Nasabah 1 gagal mengambil uang. Saldo tidak mencukupi.");
-        }
+            switch (menu) {
+                case 1:
+                    System.out.println("Saldo: " + tabungan.getSaldo());
+                    break;
+                case 2:
+                    System.out.print("Masukkan jumlah disimpan: ");
+                    tabungan.simpanUang(input.nextInt());
+                    System.out.println("Uang disimpan.");
+                    break;
+                case 3:
+                    System.out.print("Masukkan jumlah diambil: ");
+                    if (!tabungan.ambilUang(input.nextInt())) {
+                        System.out.println("Saldo tidak cukup.");
+                    } else {
+                        System.out.println("Uang diambil.");
+                    }
+                    break;
+                case 4:
+                    System.out.println("Terima kasih!");
+                    break;
+                default:
+                    System.out.println("Pilihan salah. Coba lagi.");
+            }
+        } while (menu != 4);
 
-        // Nasabah 2 mengambil uang
-        if (nasabah2.getTabungan().ambilUang(6000)) {
-            System.out.println("Saldo Nasabah 2 setelah mengambil uang (6000) : " + nasabah2.getTabungan().getSaldo());
-        } else {
-            System.out.println("Nasabah 2 gagal mengambil uang. Saldo tidak mencukupi.");
-        }
-
-        // Nasabah 2 mentransfer uang ke Nasabah 1
-        if (nasabah2.getTabungan().transfer(nasabah1.getTabungan(), 1000)) {
-            System.out.println("Transfer saldo Andin ke Dean (1000) ");
-        } else {
-            System.out.println("Transfer gagal. Saldo Nasabah tidak mencukupi.");
-        }
-
-        // Menampilkan saldo akhir
-        System.out.println("Saldo akhir Nasabah 1: " + nasabah1.getTabungan().getSaldo());
-        System.out.println("Saldo akhir Nasabah 2: " + nasabah2.getTabungan().getSaldo());
-    }     
+        input.close();
+    }
 }
-
     
 
